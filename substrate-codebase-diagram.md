@@ -7,7 +7,7 @@
 !$wasmi_mod_ref = '"wasmi::ModuleRef"'
 !$func_exec = "FunctionExecutor"
 !$alloc_fbha = '"allocator::FreeingBumpHeapAllocator"'
-!$sandb_store = '"sandbox::Store'
+!$sandb_store = '"sandbox::Store"'
 
 'autoactivate on
 activate $wasm_exec
@@ -82,11 +82,11 @@ $wasm_exec -> $wasm_exec: call()
             $wasm_exec -> $func_exec: new()
                 activate $func_exec
 
-                create $sandb_store"
-                $func_exec -> $sandb_store": new()
-                    activate $sandb_store"
-                    $func_exec <-- $sandb_store"
-                    deactivate $sandb_store"
+                create $sandb_store
+                $func_exec -> $sandb_store: new()
+                    activate $sandb_store
+                    $func_exec <-- $sandb_store
+                    deactivate $sandb_store
 
                 create $alloc_fbha
                 $func_exec -> $alloc_fbha: new()
