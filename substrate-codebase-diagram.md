@@ -1,99 +1,107 @@
 ### uml: class diagram
 ```plantuml
 @startuml
+!$wasm_exec = "WasmExecutor"
+!$wasmi_mod = '"wasmi::Module"'
+!$wasmi_mod_inst = '"wasmi::ModuleInstance"'
+!$wasmi_mod_ref = '"wasmi::ModuleRef"'
+!$func_exec = "FunctionExecutor"
+!$alloc_fbha = '"allocator::FreeingBumpHeapAllocator"'
+!$sandb_store = '"sandbox::Store'
+
 'autoactivate on
-activate WasmExecutor
-WasmExecutor -> WasmExecutor: call()
-    activate WasmExecutor
+activate $wasm_exec
+$wasm_exec -> $wasm_exec: call()
+    activate $wasm_exec
 
     ' Call to Module
-    'hnote over WasmExecutor: A Note
-    WasmExecutor -> "wasmi::Module": from_buffer()
-        activate "wasmi::Module"
-        "wasmi::Module" --> WasmExecutor: TODO
-        deactivate "wasmi::Module"
+    'hnote over $wasm_exec: A Note
+    $wasm_exec -> $wasmi_mod: from_buffer()
+        activate $wasmi_mod
+        $wasmi_mod <-- $wasm_exec: TODO
+        deactivate $wasmi_mod
 
 
     ' START "instantiate_module" section
-    WasmExecutor -> WasmExecutor: instantiate_module()
-        activate WasmExecutor #005500
-        create "wasmi::ModuleInstance"
-        WasmExecutor -> "wasmi::ModuleInstance": new()
-            activate "wasmi::ModuleInstance"
-            "wasmi::ModuleInstance" --> WasmExecutor
-            deactivate "wasmi::ModuleInstance"
+    $wasm_exec -> $wasm_exec: instantiate_module()
+        activate $wasm_exec #005500
+        create $wasmi_mod_inst
+        $wasm_exec -> $wasmi_mod_inst: new()
+            activate $wasmi_mod_inst
+            $wasmi_mod_inst --> $wasm_exec
+            deactivate $wasmi_mod_inst
 
-        WasmExecutor -> WasmExecutor: get_heap_base()
-            activate WasmExecutor
-            WasmExecutor -> "wasmi::ModuleInstance":  not_started_instance()
-                activate "wasmi::ModuleInstance"
-                WasmExecutor <-- "wasmi::ModuleInstance": TODO
-                deactivate "wasmi::ModuleInstance"
-            deactivate WasmExecutor
+        $wasm_exec -> $wasm_exec: get_heap_base()
+            activate $wasm_exec
+            $wasm_exec -> $wasmi_mod_inst: not_started_instance()
+                activate $wasmi_mod_inst
+                $wasm_exec <-- $wasmi_mod_inst: TODO
+                deactivate $wasmi_mod_inst
+            deactivate $wasm_exec
 
-        WasmExecutor -> WasmExecutor: gem_mem_instance()
-            activate WasmExecutor
-            WasmExecutor -> "wasmi::ModuleInstance": not_started_instance()
-                activate "wasmi::ModuleInstance"
-                WasmExecutor <-- "wasmi::ModuleInstance": TODO
-                deactivate "wasmi::ModuleInstance"
-            deactivate WasmExecutor
+        $wasm_exec -> $wasm_exec: gem_mem_instance()
+            activate $wasm_exec
+            $wasm_exec -> $wasmi_mod_inst: not_started_instance()
+                activate $wasmi_mod_inst
+                $wasm_exec <-- $wasmi_mod_inst: TODO
+                deactivate $wasmi_mod_inst
+            deactivate $wasm_exec
 
-        create "wasmi::ModuleRef"
-        WasmExecutor -> "wasmi::ModuleRef": assert_no_start()
-            activate "wasmi::ModuleRef"
-            WasmExecutor <-- "wasmi::ModuleRef"
-            deactivate "wasmi::ModuleRef"
+        create $wasmi_mod_ref
+        $wasm_exec -> $wasmi_mod_ref: assert_no_start()
+            activate $wasmi_mod_ref
+            $wasm_exec <-- $wasmi_mod_ref
+            deactivate $wasmi_mod_ref
 
-        WasmExecutor <-- WasmExecutor: TODO
-        deactivate WasmExecutor
+        $wasm_exec <-- $wasm_exec: TODO
+        deactivate $wasm_exec
     ' END "instantiate_module" section
 
-    WasmExecutor -> WasmExecutor: call_in_wasm_module()
-        activate WasmExecutor #005500
-        WasmExecutor -> WasmExecutor: call_in_wasm_module_with_custom_signature()
-            activate WasmExecutor
-            WasmExecutor -> WasmExecutor: get_mem_instance()
-                activate WasmExecutor
-                WasmExecutor <-- WasmExecutor: TODO
-                deactivate WasmExecutor
+    $wasm_exec -> $wasm_exec: call_in_wasm_module()
+        activate $wasm_exec #005500
+        $wasm_exec -> $wasm_exec: call_in_wasm_module_with_custom_signature()
+            activate $wasm_exec
+            $wasm_exec -> $wasm_exec: get_mem_instance()
+                activate $wasm_exec
+                $wasm_exec <-- $wasm_exec: TODO
+                deactivate $wasm_exec
 
-            WasmExecutor -> "wasmi::ModuleRef": export_by_name()
-                activate "wasmi::ModuleRef"
-                WasmExecutor <-- "wasmi::ModuleRef"
-                deactivate "wasmi::ModuleRef"
+            $wasm_exec -> $wasmi_mod_ref: export_by_name()
+                activate $wasmi_mod_ref
+                $wasm_exec <-- $wasmi_mod_ref
+                deactivate $wasmi_mod_ref
 
             ' let heap_base = Self::get_heap_base(module_instance)?;
-            WasmExecutor -> WasmExecutor: get_heapbase()
-                activate WasmExecutor
-                WasmExecutor <-- WasmExecutor: TODO
-                deactivate WasmExecutor
+            $wasm_exec -> $wasm_exec: get_heapbase()
+                activate $wasm_exec
+                $wasm_exec <-- $wasm_exec: TODO
+                deactivate $wasm_exec
 
-            ' let mut fec = FunctionExecutor::new()
-            create FunctionExecutor
-            WasmExecutor -> FunctionExecutor: new()
-                activate FunctionExecutor
+            ' let mut fec = $func_exec::new()
+            create $func_exec
+            $wasm_exec -> $func_exec: new()
+                activate $func_exec
 
-                create "sandbox::Store"
-                FunctionExecutor -> "sandbox::Store": new()
-                    activate "sandbox::Store"
-                    FunctionExecutor <-- "sandbox::Store"
-                    deactivate "sandbox::Store"
+                create $sandb_store"
+                $func_exec -> $sandb_store": new()
+                    activate $sandb_store"
+                    $func_exec <-- $sandb_store"
+                    deactivate $sandb_store"
 
-                create "allocator::FreeingBumpHeapAllocator"
-                FunctionExecutor -> "allocator::FreeingBumpHeapAllocator": new()
-                    activate "allocator::FreeingBumpHeapAllocator"
-                    FunctionExecutor <-- "allocator::FreeingBumpHeapAllocator"
-                    deactivate "allocator::FreeingBumpHeapAllocator"
+                create $alloc_fbha
+                $func_exec -> $alloc_fbha: new()
+                    activate $alloc_fbha
+                    $func_exec <-- $alloc_fbha
+                    deactivate $alloc_fbha
 
-                WasmExecutor <-- FunctionExecutor: TODO
-                deactivate FunctionExecutor
+                $wasm_exec <-- $func_exec: TODO
+                deactivate $func_exec
 
             ' let parameters = create_parameters()
-            WasmExecutor -> WasmExecutor: create_parameters()
-                activate WasmExecutor
-                WasmExecutor <-- WasmExecutor: TODO
-                deactivate WasmExecutor
+            $wasm_exec -> $wasm_exec: create_parameters()
+                activate $wasm_exec
+                $wasm_exec <-- $wasm_exec: TODO
+                deactivate $wasm_exec
 
             ' let result = runtime_io::with_externalities
 
@@ -103,7 +111,7 @@ WasmExecutor -> WasmExecutor: call()
 @enduml
 ```
 
-    class WasmExecutor {
+    class $wasm_exec {
         // Executes the provided code in a sandboxed wasm runtime
         ==
         + new()
