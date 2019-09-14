@@ -1,0 +1,3 @@
+# Diagrams (in UML) of the Parity Substrate codebase - work in progress
+
+TODO...
